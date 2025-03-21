@@ -1,0 +1,82 @@
+{
+    "name": "RedButton",
+    "maps": [
+        {
+            "name": "New action map",
+            "id": "4259009e-1bfe-4528-9b78-675d03630607",
+            "actions": [
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "fe61df7b-1fa3-40a7-ae85-cc51734ca357",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f69715d1-f78c-4b05-8839-71ab7760cb80",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Gameplay",
+            "id": "1398de8b-985a-4615-b84b-20cacc751b0e",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "a1d029b2-2dc2-4986-8555-941fbec3054d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "9eb46fc8-e031-42d2-b471-b7eb2df4282b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2e88b4c9-f0f7-44dd-8915-e7e2bfeae62a",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66dfbefc-a55d-4ec3-b8a7-0e1e34456d6a",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
