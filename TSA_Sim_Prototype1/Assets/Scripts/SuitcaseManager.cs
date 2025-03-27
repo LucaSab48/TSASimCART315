@@ -4,8 +4,8 @@ public class SuitcaseManager : MonoBehaviour
 {
     public GameObject[] suitcasePrefabs;
     public Transform spawnPoint;
-    public Transform exitPoint;
     public static GameObject currentSuitcase;
+    public static bool isMoving = false; // Track movement state
 
     public bool preventDuplicateSpawn = true;
     private int lastSpawnedIndex = -1;
@@ -20,10 +20,11 @@ public class SuitcaseManager : MonoBehaviour
         if (currentSuitcase != null)
         {
             Destroy(currentSuitcase);
+            currentSuitcase = null; // Ensure no lingering reference
         }
 
         int randomIndex;
-        
+
         if (preventDuplicateSpawn && suitcasePrefabs.Length > 1)
         {
             do
@@ -37,18 +38,36 @@ public class SuitcaseManager : MonoBehaviour
         }
 
         lastSpawnedIndex = randomIndex;
-        
-        currentSuitcase = Instantiate(suitcasePrefabs[randomIndex], spawnPoint.position, Quaternion.identity);
-        
+
+        currentSuitcase = Instantiate(suitcasePrefabs[randomIndex], spawnPoint.position, Quaternion.identity, spawnPoint.parent);
+
         bool isDangerous = Random.value < 0.2f;
         currentSuitcase.tag = isDangerous ? "DangerousSuitcase" : "SafeSuitcase";
+
+        // Reset movement state when a new suitcase spawns
+        isMoving = false;
+
+        // Ensure Rigidbody2D is set up correctly
+        Rigidbody2D rb = currentSuitcase.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero; // Reset linearVelocity instead of velocity
+            rb.angularVelocity = 0f;
+        }
     }
 
-    private void Update()
+    public static void ResetSuitcase()
     {
-        if (currentSuitcase != null && currentSuitcase.transform.position.x > exitPoint.position.x)
+        if (currentSuitcase != null)
         {
-            SpawnSuitcase();
+            Rigidbody2D rb = currentSuitcase.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero; // Reset linearVelocity
+                rb.angularVelocity = 0f;
+            }
+
+            isMoving = false; // Stop movement when switching back
         }
     }
 }

@@ -1,24 +1,24 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class buttonClickManager : MonoBehaviour
 {
     private Vector3 _ogScale;
-    public string nextScene = "PassengerCheck";
+    private SceneManager sceneToggleManager;
 
     private void Awake()
     {
         _ogScale = transform.localScale;
+        sceneToggleManager = FindFirstObjectByType<SceneManager>(); // Get reference to SceneToggleManager
     }
 
     public void OnClick()
     {
         transform.localScale = _ogScale * 0.8f;
         Invoke(nameof(ResetScale), 0.2f);
-        
-        if (CheckItem())
+
+        if (CheckItem() && sceneToggleManager != null)
         {
-            SceneManager.LoadScene(nextScene);
+            sceneToggleManager.ShowPassengerCheck(); // Toggle back to PassengerCheck
         }
     }
     
@@ -26,8 +26,7 @@ public class buttonClickManager : MonoBehaviour
     {
         transform.localScale = _ogScale;
     }
-    
-    
+
     private bool CheckItem()
     {
         GameObject[] correctItems = GameObject.FindGameObjectsWithTag("DangerousItem");
@@ -52,5 +51,4 @@ public class buttonClickManager : MonoBehaviour
 
         return true; 
     }
-    
 }
