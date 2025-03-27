@@ -18,7 +18,7 @@ public class buttonClickManager : MonoBehaviour
 
         if (CheckItem() && sceneToggleManager != null)
         {
-            sceneToggleManager.ShowPassengerCheck(); // Toggle back to PassengerCheck
+            sceneToggleManager.ShowPassengerCheck();
         }
     }
     
@@ -48,7 +48,6 @@ public class buttonClickManager : MonoBehaviour
                 return false;
             }
         }
-
         return true; 
     }
 }

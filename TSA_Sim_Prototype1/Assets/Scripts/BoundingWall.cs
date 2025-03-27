@@ -3,17 +3,29 @@ using UnityEngine;
 public class BoundingWall : MonoBehaviour
 {
     public SuitcaseManager suitcaseSpawner; 
-    public GameManager gameManager; // Reference to the GameManager
+    public GameManager gameManager; 
+    public PlaneMovement planeMovement; 
+
+    private int completedSuitcases = 0;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("DangerousSuitcase") || other.CompareTag("SafeSuitcase"))
         {
-            // Destroy the suitcase and spawn a new one
             Destroy(other.gameObject);
-            suitcaseSpawner.SpawnSuitcase();
+            completedSuitcases++;
 
-            // Re-enable the collider in GameManager
+            if (completedSuitcases >= gameManager.maxSuitcases)
+            {
+                suitcaseSpawner.StopSpawning();
+                Vector2 newDestination = new Vector2(planeMovement.destination.x, planeMovement.destination.y);
+                planeMovement.StartMoving(newDestination);
+            }
+            else
+            {
+                suitcaseSpawner.SpawnSuitcase();
+            }
+            
             if (gameManager != null)
             {
                 gameManager.EnableCollider();

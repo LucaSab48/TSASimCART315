@@ -4,6 +4,7 @@ public class SceneManager : MonoBehaviour
 {
     public GameObject passengerCheckObjects;
     public GameObject observationScreenObjects;
+    public XRayRandomizer xRayRandomizer;
 
     private void Start()
     {
@@ -14,14 +15,24 @@ public class SceneManager : MonoBehaviour
     {
         passengerCheckObjects.SetActive(false);
         observationScreenObjects.SetActive(true);
+        
+        ReloadObservationScreen();
     }
 
     public void ShowPassengerCheck()
     {
         passengerCheckObjects.SetActive(true);
         observationScreenObjects.SetActive(false);
-        
-        // Ensure suitcase stops moving when returning
+
         SuitcaseManager.ResetSuitcase();
+    }
+
+    private void ReloadObservationScreen()
+    {
+        if (xRayRandomizer != null)
+        {
+            xRayRandomizer.ClearItems();
+            xRayRandomizer.GenerateRandomItems();
+        }
     }
 }
