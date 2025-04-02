@@ -10,7 +10,6 @@ public class SuitcaseManager : MonoBehaviour
 
     public bool preventDuplicateSpawn = true;
     private int lastSpawnedIndex = -1;
-
     private bool canSpawn = true;
 
     void Awake()
@@ -72,6 +71,9 @@ public class SuitcaseManager : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             rb.angularVelocity = 0f;
         }
+
+        // Assign the suitcase to a passenger in GameManager
+        GameManager.instance.AssignSuitcaseToPassenger(isDangerous);
     }
 
     public static void ResetSuitcase()
@@ -93,4 +95,4 @@ public class SuitcaseManager : MonoBehaviour
     {
         canSpawn = false;
     }
-}
+} 
