@@ -9,6 +9,9 @@ public class DraggablePassenger : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (GameManager.instance.GetActivePassenger() != gameObject)
+            return; // Prevents interaction with non-active passengers
+
         startPosition = transform.position;
         isDragging = true;
     }
@@ -30,18 +33,20 @@ public class DraggablePassenger : MonoBehaviour
 
     void CheckPlacement()
     {
-        if (transform.position.x < exitSign.position.x) // Example threshold for "rejected"
+        if (transform.position.x < exitSign.position.x) // Rejected
         {
             Debug.Log("Passenger removed.");
+            Destroy(gameObject);
+            GameManager.instance.AdvanceToNextPassenger();
         }
-        else if (transform.position.x > boardSign.position.x) // Example threshold for "boarding"
+        else if (transform.position.x > boardSign.position.x) // Approved
         {
             Debug.Log("Passenger boarded.");
             GameManager.instance.CheckPassengerBoarding(gameObject);
         }
         else
         {
-            transform.position = startPosition; // Snap back if dropped in the middle
+            transform.position = startPosition; // Snap back if not properly placed
         }
     }
 }

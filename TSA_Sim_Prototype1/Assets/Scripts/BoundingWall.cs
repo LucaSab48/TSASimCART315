@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class BoundingWall : MonoBehaviour
 {
-    public SuitcaseManager suitcaseSpawner; 
-    public GameManager gameManager; 
-    public PlaneMovement planeMovement; 
+    public SuitcaseManager suitcaseSpawner;
+    public GameManager gameManager;
+    public PlaneMovement planeMovement;
 
     private int completedSuitcases = 0;
 
