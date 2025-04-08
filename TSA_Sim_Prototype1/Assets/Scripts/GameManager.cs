@@ -12,12 +12,12 @@ public class GameManager : MonoBehaviour
     public int maxSuitcases = 5;
     private int currentPassengerIndex = 0;
 
-    public List<GameObject> passengers; // Assign in Unity Inspector
+    public List<GameObject> passengers; // List of passengers
     private Dictionary<GameObject, bool> passengerSuitcaseMap = new Dictionary<GameObject, bool>();
 
-    private GameObject activePassenger; // The passenger currently being inspected
-    public Transform inspectionArea; // Where the active passenger moves
-    public float shiftAmount = 1.5f; // Passenger queue shift distance
+    private GameObject activePassenger; // The currently active passenger for inspection
+    public Transform inspectionArea; // The area where the passenger moves to for inspection
+    public float shiftAmount = 1.5f; // How much to shift passengers in the queue
 
     private void Awake()
     {
@@ -37,20 +37,25 @@ public class GameManager : MonoBehaviour
         sceneManager = Object.FindFirstObjectByType<SceneManager>();
         _myCollider2D = GetComponent<Collider2D>();
 
-        // Disable all passengers' colliders except the first one
+        // Disable all passengers' colliders except for the first one
         for (int i = 0; i < passengers.Count; i++)
         {
             passengers[i].GetComponent<Collider2D>().enabled = false;
         }
 
+        // Set the first passenger as the active one
         if (passengers.Count > 0)
         {
             activePassenger = passengers[0]; // First passenger is active
             activePassenger.GetComponent<Collider2D>().enabled = true;
-            MovePassengerToInspection(activePassenger); // Move first passenger immediately
+
+            // Move the active passenger to inspection area
+            PassengerMovement activeMovement = activePassenger.GetComponent<PassengerMovement>();
+            activeMovement.MovePassengerToInspection();
         }
     }
 
+    // Process when a passenger's suitcase is detected
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("SafeSuitcase") || other.CompareTag("DangerousSuitcase"))
@@ -62,14 +67,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void EnableCollider()
-    {
-        if (_myCollider2D != null)
-        {
-            _myCollider2D.enabled = true;
-        }
-    }
-
+    // Method to assign a suitcase to the current passenger
     public void AssignSuitcaseToPassenger(bool isDangerous)
     {
         if (currentPassengerIndex < passengers.Count)
@@ -85,12 +83,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    // Retrieve the currently active passenger
     public GameObject GetActivePassenger()
     {
         return activePassenger;
     }
 
+    // Process the boarding of a passenger
     public void CheckPassengerBoarding(GameObject passenger)
     {
         if (!passengerSuitcaseMap.ContainsKey(passenger))
@@ -120,6 +119,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Over! Restarting...");
     }
 
+    // Restart the game
     public void RestartGame()
     {
         currentPassengerIndex = 0;
@@ -128,14 +128,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Restarted");
     }
 
-    private void MovePassengerToInspection(GameObject passenger)
-    {
-        if (inspectionArea != null)
-        {
-            StartCoroutine(MoveToPosition(passenger, inspectionArea.position, 0.5f));
-        }
-    }
-
+    // Advance to the next passenger in the queue
     public void AdvanceToNextPassenger()
     {
         if (passengers.Count == 0)
@@ -145,24 +138,25 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // Ensure the previous active passenger is disabled and its collider is off
+        // Disable the collider of the current active passenger
         if (activePassenger != null)
         {
             activePassenger.GetComponent<Collider2D>().enabled = false;
         }
 
-        // Increment the passenger index to move to the next one
         currentPassengerIndex++;
 
-        // Ensure there are still passengers left before accessing the next one
         if (currentPassengerIndex < passengers.Count)
         {
             activePassenger = passengers[currentPassengerIndex];
-            activePassenger.GetComponent<Collider2D>().enabled = true; // Enable the collider of the next passenger
-            MovePassengerToInspection(activePassenger); // Move first passenger to inspection
+            activePassenger.GetComponent<Collider2D>().enabled = true;
 
-            // Now shift the rest of the passengers in line up
-            ShiftWaitingLineUp();
+            // Move the next active passenger
+            PassengerMovement activeMovement = activePassenger.GetComponent<PassengerMovement>();
+            activeMovement.MovePassengerToInspection();
+
+            // Shift all passengers after the current one
+            StartCoroutine(ShiftWaitingLineUp());
         }
         else
         {
@@ -171,30 +165,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void ShiftWaitingLineUp()
+    // Shift passengers forward in the queue (move their positions)
+    private IEnumerator ShiftWaitingLineUp()
     {
         Debug.Log($"Shifting passengers starting from index {currentPassengerIndex + 1}");
 
         for (int i = currentPassengerIndex + 1; i < passengers.Count; i++)
         {
-            // Log each passenger's current position
-            Debug.Log($"Shifting passenger {passengers[i].name} from {passengers[i].transform.position}");
+            // Get each passenger's current position and shift them
+            GameObject passenger = passengers[i];
+            Vector3 newPosition = passenger.transform.position;
+            newPosition.x += shiftAmount;
 
-            Vector3 newPosition = passengers[i].transform.position;
-            newPosition.x += shiftAmount; // Move up in the queue (you can adjust the axis as needed)
-    
-            // Log the new position
-            Debug.Log($"New position for {passengers[i].name}: {newPosition}");
-    
-            StartCoroutine(MoveToPosition(passengers[i], newPosition, 0.5f));
+            yield return StartCoroutine(MoveToPosition(passenger, newPosition, 0.5f));
         }
     }
 
-    
-
+    // Coroutine to smoothly move a passenger to a new position
     private IEnumerator MoveToPosition(GameObject obj, Vector3 targetPosition, float duration)
     {
-        Debug.Log($"Moving passenger {obj.name} to {targetPosition}"); // Debug log here
         Vector3 startPos = obj.transform.position;
         float elapsedTime = 0f;
 
@@ -208,4 +197,12 @@ public class GameManager : MonoBehaviour
         obj.transform.position = targetPosition;
     }
 
+    // Enable the collider of the GameManager's collider (if applicable)
+    public void EnableCollider()
+    {
+        if (_myCollider2D != null)
+        {
+            _myCollider2D.enabled = true;
+        }
+    }
 }
