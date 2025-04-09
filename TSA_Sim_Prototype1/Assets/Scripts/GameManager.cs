@@ -119,6 +119,7 @@ public class GameManager : MonoBehaviour
     }
 
 
+
     private void TriggerFailState()
     {
         Debug.Log("Game Over! Restarting...");
@@ -168,6 +169,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("No more passengers.");
         }
     }
+
 
 
 
