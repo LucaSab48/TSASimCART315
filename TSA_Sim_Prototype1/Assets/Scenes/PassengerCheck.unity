@@ -3091,7 +3091,7 @@ MonoBehaviour:
   - {fileID: 433229130}
   - {fileID: 2004185981}
   inspectionArea: {fileID: 1599334850}
-  shiftAmount: 2
+  shiftAmount: 2.5
 --- !u!4 &2070702201
 Transform:
   m_ObjectHideFlags: 0
@@ -3126,7 +3126,7 @@ MonoBehaviour:
   - {fileID: 3234854162870560902, guid: d4e7b2fad4b6acd40ad38eabb3d73c35, type: 3}
   - {fileID: 8773629181982523333, guid: 020b4416f9653e1418b30ef050a78128, type: 3}
   spawnPoint: {fileID: 1188120667}
-  preventDuplicateSpawn: 1
+  preventDuplicateSpawn: 0
 --- !u!61 &2070702203
 BoxCollider2D:
   m_ObjectHideFlags: 0

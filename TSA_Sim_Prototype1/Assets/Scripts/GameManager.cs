@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> passengers;
     private Dictionary<GameObject, bool> passengerSuitcaseMap = new Dictionary<GameObject, bool>();
+    private GameObject currentSuitcasePassenger;
+
 
     private GameObject activePassenger;
     public Transform inspectionArea;
@@ -45,6 +47,8 @@ public class GameManager : MonoBehaviour
         if (passengers.Count > 0)
         {
             activePassenger = passengers[0];
+            currentSuitcasePassenger = activePassenger; // 🔧 This was missing!
+
             activePassenger.GetComponent<Collider2D>().enabled = true;
 
             PassengerMovement activeMovement = activePassenger.GetComponent<PassengerMovement>();
@@ -53,6 +57,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(ShiftWaitingLineUp(1)); // Shift passengers after the first
         }
     }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -67,18 +72,24 @@ public class GameManager : MonoBehaviour
 
     public void AssignSuitcaseToPassenger(bool isDangerous)
     {
-        if (currentPassengerIndex < passengers.Count)
+        if (currentSuitcasePassenger == null || currentSuitcasePassenger.Equals(null))
         {
-            GameObject passenger = passengers[currentPassengerIndex];
-            passengerSuitcaseMap[passenger] = isDangerous;
+            Debug.LogWarning("Tried to assign suitcase, but currentSuitcasePassenger is null or destroyed.");
+            return;
+        }
 
-            Debug.Log($"Assigned suitcase to passenger {passenger.name}. Dangerous: {isDangerous}");
-        }
-        else
+        if (!passengers.Contains(currentSuitcasePassenger))
         {
-            Debug.LogWarning("No more passengers available!");
+            Debug.LogWarning($"Passenger {currentSuitcasePassenger.name} is no longer in the passenger list.");
+            return;
         }
+
+        passengerSuitcaseMap[currentSuitcasePassenger] = isDangerous;
+        Debug.Log($"Assigned suitcase to passenger {currentSuitcasePassenger.name}. Dangerous: {isDangerous}");
     }
+
+
+
 
     public GameObject GetActivePassenger()
     {
@@ -112,6 +123,12 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame(); // Ensures frame logic (like shifting) completes
 
+        if (currentSuitcasePassenger == passenger)
+        {
+            currentSuitcasePassenger = null;
+        }
+
+        
         passengers.Remove(passenger);
         Destroy(passenger);
 
@@ -147,28 +164,21 @@ public class GameManager : MonoBehaviour
             activePassenger.GetComponent<Collider2D>().enabled = false;
         }
 
-        if (currentPassengerIndex < passengers.Count)
+        // Now assign the new first passenger as active
+        activePassenger = passengers[0];
+        currentSuitcasePassenger = activePassenger; // Track passenger tied to upcoming suitcase;
+        activePassenger.GetComponent<Collider2D>().enabled = true;
+
+        PassengerMovement activeMovement = activePassenger.GetComponent<PassengerMovement>();
+        activeMovement.MovePassengerToInspection();
+
+        if (passengers.Count > 1)
         {
-            activePassenger = passengers[currentPassengerIndex];
-            activePassenger.GetComponent<Collider2D>().enabled = true;
-
-            PassengerMovement activeMovement = activePassenger.GetComponent<PassengerMovement>();
-            activeMovement.MovePassengerToInspection();
-
-            // Only shift others if there are more passengers behind the current one
-            if (currentPassengerIndex + 1 < passengers.Count)
-            {
-                StartCoroutine(ShiftWaitingLineUp(currentPassengerIndex + 1));
-            }
-
-            currentPassengerIndex++; // Advance the index after processing
-        }
-        else
-        {
-            activePassenger = null;
-            Debug.Log("No more passengers.");
+            StartCoroutine(ShiftWaitingLineUp(1)); // Everyone except the active one
         }
     }
+
+
 
 
 
