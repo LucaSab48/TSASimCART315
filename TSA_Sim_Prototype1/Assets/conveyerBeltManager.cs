@@ -10,7 +10,13 @@ public class ConveyerBeltButton : MonoBehaviour
         if (SuitcaseManager.currentSuitcase != null)
         {
             SuitcaseMovement suitcaseMovement = SuitcaseManager.currentSuitcase.GetComponent<SuitcaseMovement>();
-            Vector3 targetPosition = SuitcaseManager.currentSuitcase.transform.position + (moveLeft ? Vector3.left : Vector3.right) * distanceToMove;
+
+            // 🔒 Prevent movement if locked
+            if (suitcaseMovement.isLocked) return;
+
+            Vector3 targetPosition = SuitcaseManager.currentSuitcase.transform.position + 
+                                     (moveLeft ? Vector3.left : Vector3.right) * distanceToMove;
+
             suitcaseMovement.MoveSuitcase(targetPosition);
         }
     }

@@ -369,6 +369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exitSign: {fileID: 2138247366}
   boardSign: {fileID: 1611019783}
+  suitcaseReadyXThreshold: 5.5
 --- !u!61 &433229134
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -655,7 +656,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveLeft: 1
-  distanceToMove: 5.6
+  distanceToMove: 5.8
+--- !u!1 &566579920
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 566579921}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &566579921
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566579920}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.53, y: 7.88, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1757926615}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &747535780
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,7 +787,7 @@ GameObject:
   - component: {fileID: 892408585}
   - component: {fileID: 892408584}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: CrashedPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -793,7 +825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.90943396, g: 0.23164818, b: 0.23164818, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -922,6 +954,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exitSign: {fileID: 2138247366}
   boardSign: {fileID: 1611019783}
+  suitcaseReadyXThreshold: 5.5
 --- !u!61 &1028131064
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -981,6 +1014,81 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectionArea: {fileID: 1599334850}
+--- !u!1 &1056117816
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1056117817}
+  - component: {fileID: 1056117819}
+  - component: {fileID: 1056117818}
+  m_Layer: 5
+  m_Name: BoardedPlane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1056117817
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056117816}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1976804395}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1056117818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056117816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.17248121, g: 0.9622642, b: 0.20309052, a: 0.392}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1056117819
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056117816}
+  m_CullTransparentMesh: 1
 --- !u!1 &1146642121
 GameObject:
   m_ObjectHideFlags: 0
@@ -1247,7 +1355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveLeft: 0
-  distanceToMove: 5.5
+  distanceToMove: 5.8
 --- !u!1 &1305678859
 GameObject:
   m_ObjectHideFlags: 0
@@ -1506,6 +1614,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exitSign: {fileID: 2138247366}
   boardSign: {fileID: 1611019783}
+  suitcaseReadyXThreshold: 5.5
 --- !u!61 &1311569265
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1745,7 +1854,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   suitcaseSpawner: {fileID: 2070702202}
   gameManager: {fileID: 2070702200}
-  planeMovement: {fileID: 351117878}
+  planeCrash: {fileID: 1566052385}
+  planeSafe: {fileID: 351117878}
 --- !u!61 &1415411219
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1984,7 +2094,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.260736, y: 0}
+  m_Offset: {x: -4.0013113, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1994,7 +2104,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 16.333782, y: 1.72}
+  m_Size: {x: 24.857878, y: 1.72}
   m_EdgeRadius: 0
 --- !u!1 &1566052381
 GameObject:
@@ -2006,8 +2116,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1566052382}
   - component: {fileID: 1566052384}
+  - component: {fileID: 1566052385}
   m_Layer: 0
-  m_Name: plane_0 (1)
+  m_Name: plane_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2083,6 +2194,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1566052385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566052381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f54705de81dba7458e2ca7381e3b378, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destination: {x: 5, y: 0}
+  moveSpeed: 2.5
 --- !u!1 &1599334849
 GameObject:
   m_ObjectHideFlags: 0
@@ -2439,6 +2564,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exitSign: {fileID: 2138247366}
   boardSign: {fileID: 1611019783}
+  suitcaseReadyXThreshold: 5.5
 --- !u!61 &1715381484
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2636,6 +2762,7 @@ Transform:
   - {fileID: 2138247366}
   - {fileID: 1611019783}
   - {fileID: 1599334850}
+  - {fileID: 566579921}
   m_Father: {fileID: 1811560099}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1811560098
@@ -2847,6 +2974,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 892408583}
+  - {fileID: 1056117817}
   m_Father: {fileID: 1757926615}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2949,6 +3077,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exitSign: {fileID: 2138247366}
   boardSign: {fileID: 1611019783}
+  suitcaseReadyXThreshold: 5.5
 --- !u!212 &2004185985
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3092,6 +3221,9 @@ MonoBehaviour:
   - {fileID: 2004185981}
   inspectionArea: {fileID: 1599334850}
   shiftAmount: 2.5
+  dangerousPassengerBoarded: 0
+  boardedPlanePanel: {fileID: 1056117816}
+  crashedPlanePanel: {fileID: 892408582}
 --- !u!4 &2070702201
 Transform:
   m_ObjectHideFlags: 0

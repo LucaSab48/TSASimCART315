@@ -20,6 +20,13 @@ public class GameManager : MonoBehaviour
     private GameObject activePassenger;
     public Transform inspectionArea;
     public float shiftAmount = 1.5f;
+    public bool dangerousPassengerBoarded = false;
+    
+    [Header("Endgame UI Panels")]
+    public GameObject boardedPlanePanel;
+    public GameObject crashedPlanePanel;
+    private bool isPlaneFlying = false;
+
 
     private void Awake()
     {
@@ -67,8 +74,10 @@ public class GameManager : MonoBehaviour
             SuitcaseManager.ResetSuitcase();
             sceneManager.ShowObservationScreen();
             _myCollider2D.enabled = false;
+            
         }
     }
+
 
     public void AssignSuitcaseToPassenger(bool isDangerous)
     {
@@ -139,6 +148,7 @@ public class GameManager : MonoBehaviour
 
     private void TriggerFailState()
     {
+        dangerousPassengerBoarded = true;
         Debug.Log("Game Over! Restarting...");
     }
 
@@ -152,6 +162,18 @@ public class GameManager : MonoBehaviour
 
     public void AdvanceToNextPassenger()
     {
+        // 🚚 Auto-move suitcase to the right after passenger is handled
+        if (SuitcaseManager.currentSuitcase != null)
+        {
+            SuitcaseMovement movement = SuitcaseManager.currentSuitcase.GetComponent<SuitcaseMovement>();
+            if (movement != null)
+            {
+                Vector3 newTarget = SuitcaseManager.currentSuitcase.transform.position + Vector3.right * 5f;
+                movement.AutoMove(newTarget);
+            }
+        }
+
+        // 🧍 If all passengers are done, exit
         if (passengers.Count == 0)
         {
             Debug.Log("All passengers processed.");
@@ -159,30 +181,27 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // 🔄 Set new active passenger
         if (activePassenger != null)
         {
             activePassenger.GetComponent<Collider2D>().enabled = false;
         }
 
-        // Now assign the new first passenger as active
         activePassenger = passengers[0];
-        currentSuitcasePassenger = activePassenger; // Track passenger tied to upcoming suitcase;
+        currentSuitcasePassenger = activePassenger;
         activePassenger.GetComponent<Collider2D>().enabled = true;
 
         PassengerMovement activeMovement = activePassenger.GetComponent<PassengerMovement>();
         activeMovement.MovePassengerToInspection();
 
+        // 👥 Shift waiting passengers
         if (passengers.Count > 1)
         {
-            StartCoroutine(ShiftWaitingLineUp(1)); // Everyone except the active one
+            StartCoroutine(ShiftWaitingLineUp(1));
         }
     }
-
-
-
-
-
-
+    
+    
     private IEnumerator ShiftWaitingLineUp(int startIndex)
     {
         Debug.Log($"Shifting passengers starting from index {startIndex}");
@@ -217,6 +236,32 @@ public class GameManager : MonoBehaviour
         if (_myCollider2D != null)
         {
             _myCollider2D.enabled = true;
+        }
+    }
+    
+    public void EndGame(bool isVictory)
+    {
+        // Start the coroutine to show the panel after the plane's flight
+        StartCoroutine(ShowEndScreenAfterFlight(isVictory));
+    }
+
+    private IEnumerator ShowEndScreenAfterFlight(bool isVictory)
+    {
+        // Wait for the plane's flight animation to complete (this can be adjusted based on your animation)
+        yield return new WaitForSeconds(5f);  // Example: wait for 5 seconds, replace with actual animation length
+
+        // Deactivate any existing panels before showing the correct one
+        boardedPlanePanel.SetActive(false);
+        crashedPlanePanel.SetActive(false);
+
+        // Show the correct panel based on the outcome
+        if (isVictory)
+        {
+            boardedPlanePanel.SetActive(true);
+        }
+        else
+        {
+            crashedPlanePanel.SetActive(true);
         }
     }
 }

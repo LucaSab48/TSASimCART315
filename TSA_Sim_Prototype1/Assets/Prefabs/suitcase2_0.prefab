@@ -176,3 +176,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  isLocked: 0
+  useLockPosition: 1
+  lockPositionX: 6

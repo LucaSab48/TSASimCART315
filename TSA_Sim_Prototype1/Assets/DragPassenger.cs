@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class DraggablePassenger : MonoBehaviour
 {
@@ -6,11 +7,19 @@ public class DraggablePassenger : MonoBehaviour
     private bool isDragging = false;
     public Transform exitSign;
     public Transform boardSign;
+    public float suitcaseReadyXThreshold = -3f; // Adjust this based on your scene layout
 
     void OnMouseDown()
     {
         if (GameManager.instance.GetActivePassenger() != gameObject)
-            return; // Prevents interaction with non-active passengers
+            return;
+
+        GameObject suitcase = SuitcaseManager.currentSuitcase;
+        if (suitcase == null || suitcase.transform.position.x < suitcaseReadyXThreshold)
+        {
+            Debug.Log("Suitcase hasn't reached the inspection point yet.");
+            return;
+        }
 
         startPosition = transform.position;
         isDragging = true;
@@ -18,35 +27,45 @@ public class DraggablePassenger : MonoBehaviour
 
     void OnMouseDrag()
     {
-        if (isDragging)
-        {
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            transform.position = new Vector3(mousePosition.x, transform.position.y, transform.position.z);
-        }
+        if (!isDragging) return;
+
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        transform.position = new Vector3(mousePosition.x, transform.position.y, transform.position.z);
     }
 
     void OnMouseUp()
     {
+        if (!isDragging) return;
+
         isDragging = false;
         CheckPlacement();
     }
 
     void CheckPlacement()
     {
-        if (transform.position.x < exitSign.position.x) // Rejected
+        if (transform.position.x < exitSign.position.x)
         {
             Debug.Log("Passenger removed.");
-            Destroy(gameObject);
-            GameManager.instance.AdvanceToNextPassenger();
+            StartCoroutine(RemovePassengerAfterExit());
         }
-        else if (transform.position.x > boardSign.position.x) // Approved
+        else if (transform.position.x > boardSign.position.x)
         {
             Debug.Log("Passenger boarded.");
             GameManager.instance.CheckPassengerBoarding(gameObject);
         }
         else
         {
-            transform.position = startPosition; // Snap back if not properly placed
+            transform.position = startPosition;
         }
+    }
+
+    private IEnumerator RemovePassengerAfterExit()
+    {
+        yield return new WaitForEndOfFrame();
+
+        GameManager.instance.passengers.Remove(gameObject);
+        Destroy(gameObject);
+
+        GameManager.instance.AdvanceToNextPassenger();
     }
 }
