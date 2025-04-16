@@ -247,14 +247,12 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ShowEndScreenAfterFlight(bool isVictory)
     {
-        // Wait for the plane's flight animation to complete (this can be adjusted based on your animation)
-        yield return new WaitForSeconds(5f);  // Example: wait for 5 seconds, replace with actual animation length
+        // Wait for the plane's flight animation to complete
+        yield return new WaitForSeconds(5f);
 
-        // Deactivate any existing panels before showing the correct one
         boardedPlanePanel.SetActive(false);
         crashedPlanePanel.SetActive(false);
 
-        // Show the correct panel based on the outcome
         if (isVictory)
         {
             boardedPlanePanel.SetActive(true);
@@ -263,5 +261,11 @@ public class GameManager : MonoBehaviour
         {
             crashedPlanePanel.SetActive(true);
         }
+
+        // 🔁 Wait 2 seconds after the panel appears, then return to MainMenu
+        yield return new WaitForSeconds(2f);
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
     }
+
 }
